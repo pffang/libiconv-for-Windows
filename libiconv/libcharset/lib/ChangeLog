@@ -1,3 +1,7 @@
+2023-09-18  ChenPi11      <wushengwuxi-msctinoulk@outlook.com>
+
+	Cut libcharset source package for 'libiconv-for-Windows'.
+
 2019-12-24  Bruno Haible  <bruno@clisp.org>
 
 	Update from gnulib.

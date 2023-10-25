@@ -1,21 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="include">
-      <UniqueIdentifier>{7da47a09-76fe-42bf-b051-429d8cb50d91}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="res">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="libiconv">
       <UniqueIdentifier>{ea5c62c9-5751-41a6-9491-60a9287b9188}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="libiconv\libcharset">
-      <UniqueIdentifier>{6227dc88-5e8e-4700-9fe1-10a898b5107e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="libiconv\libcharset\include">
-      <UniqueIdentifier>{9055e35b-e34a-4711-bd66-ddcbf6a8e26e}</UniqueIdentifier>
     </Filter>
     <Filter Include="libiconv\include">
       <UniqueIdentifier>{8fbbfdff-78bd-44cd-ba2f-ab6064460015}</UniqueIdentifier>
@@ -23,8 +10,18 @@
     <Filter Include="libiconv\lib">
       <UniqueIdentifier>{328a7392-5320-4b05-9536-f560e864401d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libiconv\libcharset\lib">
+    <Filter Include="libcharset">
+      <UniqueIdentifier>{6227dc88-5e8e-4700-9fe1-10a898b5107e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libcharset\include">
+      <UniqueIdentifier>{9055e35b-e34a-4711-bd66-ddcbf6a8e26e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libcharset\lib">
       <UniqueIdentifier>{724f6740-3a62-4d17-ae88-f0e13fbe8b8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libiconv\windows">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -33,38 +30,38 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libiconv\libcharset\lib\localcharset.c">
-      <Filter>libiconv\libcharset\lib</Filter>
+      <Filter>libcharset\lib</Filter>
     </ClCompile>
     <ClCompile Include="libiconv\libcharset\lib\relocatable-stub.c">
-      <Filter>libiconv\libcharset\lib</Filter>
+      <Filter>libcharset\lib</Filter>
     </ClCompile>
     <ClCompile Include="libiconv\lib\iconv.c">
       <Filter>libiconv\lib</Filter>
     </ClCompile>
-    <ClCompile Include="libiconv\lib\relocatable.c">
+    <ClCompile Include="libiconv\lib\compat.c">
       <Filter>libiconv\lib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\iconv.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="libiconv\include\iconv.h">
-      <Filter>libiconv\include</Filter>
-    </ClInclude>
-    <ClInclude Include="libiconv\libcharset\include\libcharset.h">
-      <Filter>libiconv\libcharset\include</Filter>
-    </ClInclude>
-    <ClInclude Include="libiconv\libcharset\include\localcharset.h">
-      <Filter>libiconv\libcharset\include</Filter>
-    </ClInclude>
     <ClInclude Include="libiconv\libcharset\config.h">
-      <Filter>libiconv\libcharset</Filter>
+      <Filter>libcharset</Filter>
+    </ClInclude>
+    <ClInclude Include="libiconv\libcharset\include\libcharset.build.h">
+      <Filter>libcharset\include</Filter>
+    </ClInclude>
+    <ClInclude Include="libiconv\libcharset\include\localcharset.build.h">
+      <Filter>libcharset\include</Filter>
+    </ClInclude>
+    <ClInclude Include="libiconv\config.h">
+      <Filter>libiconv</Filter>
+    </ClInclude>
+    <ClInclude Include="libiconv\include\iconv.build.h">
+      <Filter>libiconv\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="res\libiconv.rc">
-      <Filter>res</Filter>
+    <ResourceCompile Include="libiconv\windows\libiconv.rc">
+      <Filter>libiconv\windows</Filter>
     </ResourceCompile>
   </ItemGroup>
 </Project>

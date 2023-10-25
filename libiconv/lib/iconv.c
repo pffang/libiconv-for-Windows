@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1999-2008, 2011, 2016, 2018, 2020, 2022 Free Software Foundation, Inc.
+ * Copyright (C) 1999-2008, 2011, 2016, 2018, 2020, 2022-2023 Free Software Foundation, Inc.
  * This file is part of the GNU LIBICONV Library.
  *
  * The GNU LIBICONV Library is free software; you can redistribute it
@@ -17,13 +17,13 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <iconv.h>
+#include <iconv.build.h>
 
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
 #include "config.h"
-#include "localcharset.h"
+#include "localcharset.h.inst"
 
 #ifdef __CYGWIN__
 #include <cygwin/version.h>
@@ -236,8 +236,10 @@ iconv_t iconv_open (const char* tocode, const char* fromcode)
   struct conv_struct * cd;
   unsigned int from_index;
   int from_wchar;
+  unsigned int from_surface;
   unsigned int to_index;
   int to_wchar;
+  unsigned int to_surface;
   int transliterate;
   int discard_ilseq;
 
@@ -286,7 +288,7 @@ int iconv_close (iconv_t icd)
  * fit in an iconv_allocation_t.
  * If this verification fails, iconv_allocation_t must be made larger and
  * the major version in LIBICONV_VERSION_INFO must be bumped.
- * Currently 'struct conv_struct' has 21 integer/pointer fields, and
+ * Currently 'struct conv_struct' has 23 integer/pointer fields, and
  * 'struct wchar_conv_struct' additionally has an 'mbstate_t' field.
  */
 typedef int verify_size_1[2 * (sizeof (struct conv_struct) <= sizeof (iconv_allocation_t)) - 1];
@@ -298,8 +300,10 @@ int iconv_open_into (const char* tocode, const char* fromcode,
   struct conv_struct * cd;
   unsigned int from_index;
   int from_wchar;
+  unsigned int from_surface;
   unsigned int to_index;
   int to_wchar;
+  unsigned int to_surface;
   int transliterate;
   int discard_ilseq;
 
@@ -315,6 +319,9 @@ invalid:
   return -1;
 }
 
+/* Bit mask of all valid surfaces. */
+#define ALL_SURFACES (ICONV_SURFACE_EBCDIC_ZOS_UNIX)
+
 int iconvctl (iconv_t icd, int request, void* argument)
 {
   conv_t cd = (conv_t) icd;
@@ -322,7 +329,8 @@ int iconvctl (iconv_t icd, int request, void* argument)
     case ICONV_TRIVIALP:
       *(int *)argument =
         ((cd->lfuncs.loop_convert == unicode_loop_convert
-          && cd->iindex == cd->oindex)
+          && cd->iindex == cd->oindex
+          && cd->isurface == cd->osurface)
          || cd->lfuncs.loop_convert == wchar_id_loop_convert
          ? 1 : 0);
       return 0;
@@ -358,6 +366,28 @@ int iconvctl (iconv_t icd, int request, void* argument)
         cd->fallbacks.data = NULL;
       }
       return 0;
+    case ICONV_GET_FROM_SURFACE:
+      *(unsigned int *)argument = cd->isurface;
+      return 0;
+    case ICONV_SET_FROM_SURFACE:
+      if ((*(const unsigned int *)argument & ~ALL_SURFACES) == 0) {
+        cd->isurface = *(const unsigned int *)argument;
+        return 0;
+      } else {
+        errno = EINVAL;
+        return -1;
+      }
+    case ICONV_GET_TO_SURFACE:
+      *(unsigned int *)argument = cd->osurface;
+      return 0;
+    case ICONV_SET_TO_SURFACE:
+      if ((*(const unsigned int *)argument & ~ALL_SURFACES) == 0) {
+        cd->osurface = *(const unsigned int *)argument;
+        return 0;
+      } else {
+        errno = EINVAL;
+        return -1;
+      }
     default:
       errno = EINVAL;
       return -1;

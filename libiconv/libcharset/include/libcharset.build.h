@@ -18,9 +18,9 @@
 #ifndef _LIBCHARSET_H
 #define _LIBCHARSET_H
 
-#if @HAVE_VISIBILITY@ && BUILDING_LIBCHARSET
+#if HAVE_VISIBILITY
 # define LIBCHARSET_SHLIB_EXPORTED __attribute__((__visibility__("default")))
-#elif defined _MSC_VER && BUILDING_LIBCHARSET
+#elif defined _MSC_VER
 /* When building with MSVC, exporting a symbol means that the object file
    contains a "linker directive" of the form /EXPORT:symbol.  This can be
    inspected through the "objdump -s --section=.drectve FILE" or
@@ -35,7 +35,7 @@
 # define LIBCHARSET_SHLIB_EXPORTED
 #endif
 
-#include <localcharset.h>
+#include "localcharset.build.h"
 
 
 #ifdef __cplusplus

@@ -57,18 +57,18 @@
   <ItemGroup>
     <ClCompile Include="libiconv\libcharset\lib\localcharset.c" />
     <ClCompile Include="libiconv\libcharset\lib\relocatable-stub.c" />
+    <ClCompile Include="libiconv\lib\compat.c" />
     <ClCompile Include="libiconv\lib\iconv.c" />
-    <ClCompile Include="libiconv\lib\relocatable.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\iconv.h" />
-    <ClInclude Include="libiconv\include\iconv.h" />
+    <ClInclude Include="libiconv\config.h" />
+    <ClInclude Include="libiconv\include\iconv.build.h" />
     <ClInclude Include="libiconv\libcharset\config.h" />
-    <ClInclude Include="libiconv\libcharset\include\libcharset.h" />
-    <ClInclude Include="libiconv\libcharset\include\localcharset.h" />
+    <ClInclude Include="libiconv\libcharset\include\libcharset.build.h" />
+    <ClInclude Include="libiconv\libcharset\include\localcharset.build.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="res\libiconv.rc" />
+    <ResourceCompile Include="libiconv\windows\libiconv.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1704EA01-6B21-4362-9F1F-44D25CF2E0D7}</ProjectGuid>

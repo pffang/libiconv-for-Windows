@@ -1,3 +1,54 @@
+2023-09-18  ChenPi11      <wushengwuxi-msctinoulk@outlook.com>
+
+	Cut libcharset source package for 'libiconv-for-Windows'.
+
+2023-09-18  Bruno Haible  <bruno@clisp.org>
+
+	Fix shared library support on Android.
+	Patch from <https://savannah.gnu.org/patch/index.php?10393>.
+	* m4/libtool.m4: On Android, fix library_names_spec and
+	hardcode_libdir_flag_spec.
+
+2023-09-16  Bruno Haible  <bruno@clisp.org>
+
+	Fix a misnomer.
+	* include/export.h (LIBCHARSET_SHLIB_EXPORTED): Renamed from
+	LIBCHARSET_DLL_EXPORTED. Prefer the term "shared library", since the
+	term "DLL" applies only to Windows.
+	* Makefile.devel (include/libcharset.h.build.in,
+	include/localcharset.h.build.in): Insert LIBCHARSET_SHLIB_EXPORTED
+	instead of LIBCHARSET_DLL_EXPORTED.
+	* lib/relocatable-stub.c (libcharset_set_relocation_prefix): Use
+	LIBCHARSET_SHLIB_EXPORTED instead of LIBCHARSET_DLL_EXPORTED.
+	* lib/Makefile.in (DEFS): Update comment.
+	* Makefile.in (install-lib): Update comment.
+
+2023-09-06  Bruno Haible  <bruno@clisp.org>
+
+	Don't export symbols from static MSVC .obj files.
+	Suggested by Dmitry Bely <dmitry.bely@gmail.com> in
+	<https://lists.gnu.org/archive/html/bug-gnu-libiconv/2023-08/msg00002.html>.
+	* include/export.h: Add a copyright notice. Set LIBCHARSET_DLL_EXPORTED
+	to empty on MSVC when DLL_EXPORT is not defined.
+	* Makefile.devel (include/libcharset.h.build.in,
+	include/localcharset.h.build.in): Filter out the second copyright
+	notice.
+
+2023-05-21  Bruno Haible  <bruno@clisp.org>
+
+	Support creating shared libraries on Hurd/x86_64.
+	Patch from
+	<https://lists.gnu.org/archive/html/bug-hurd/2023-05/msg00086.html>.
+	* m4/libtool.m4 (_LT_ENABLE_LOCK): Treat Hurd/x86_64 like
+	Linux/x86_64.
+
+2022-07-17  Bruno Haible  <bruno@clisp.org>
+
+	Split autogen.sh into autopull.sh and autogen.sh.
+	* autopull.sh: New file.
+	* autogen.sh: Mention it.
+	* HACKING: Likewise.
+
 2022-05-15  Bruno Haible  <bruno@clisp.org>
 
 	Switch to libtool 2.4.7.

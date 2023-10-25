@@ -15,8 +15,6 @@
    License along with the GNU LIBICONV Library; see the file COPYING.LIB.
    If not, see <https://www.gnu.org/licenses/>.  */
 
-/* When installed, this file is called "iconv.h". */
-
 #ifndef _LIBICONV_H
 #define _LIBICONV_H
 
@@ -25,7 +23,24 @@ extern "C" {
 #endif
 
 #define _LIBICONV_VERSION 0x0111    /* version number: (major<<8) + minor */
-extern @DLL_VARIABLE@ int _libiconv_version; /* Likewise */
+
+#if HAVE_VISIBILITY
+# define LIBICONV_SHLIB_EXPORTED __attribute__((__visibility__("default")))
+#elif defined _MSC_VER
+/* When building with MSVC, exporting a symbol means that the object file
+   contains a "linker directive" of the form /EXPORT:symbol.  This can be
+   inspected through the "objdump -s --section=.drectve FILE" or
+   "dumpbin /directives FILE" commands.
+   The symbols from this file should be exported if and only if the object
+   file gets included in a DLL.  Libtool, on Windows platforms, defines
+   the C macro DLL_EXPORT (together with PIC) when compiling for a shared
+   library (called DLL under Windows) and does not define it when compiling
+   an object file meant to be linked statically into some executable.  */
+#define LIBICONV_SHLIB_EXPORTED __declspec(dllexport)
+#else
+# define LIBICONV_SHLIB_EXPORTED
+#endif
+extern LIBICONV_SHLIB_EXPORTED int _libiconv_version; /* Likewise */
 
 #ifdef __cplusplus
 }
@@ -59,11 +74,15 @@ typedef void* iconv_t;
 
 /* Get errno declaration and values. */
 #include <errno.h>
+
+/* MSVC has EILSEQ. */
+#if 0
 /* Some systems, like SunOS 4, don't have EILSEQ. Some systems, like BSD/OS,
    have EILSEQ in a different header.  On these systems, define EILSEQ
    ourselves. */
 #ifndef EILSEQ
-#define EILSEQ ENOENT
+#define EILSEQ 
+#endif
 #endif
 
 
@@ -77,7 +96,7 @@ extern "C" {
 #ifndef LIBICONV_PLUG
 #define iconv_open libiconv_open
 #endif
-extern iconv_t iconv_open (const char* tocode, const char* fromcode);
+extern LIBICONV_SHLIB_EXPORTED iconv_t iconv_open (const char* tocode, const char* fromcode);
 
 /* Converts, using conversion descriptor ‘cd’, at most ‘*inbytesleft’ bytes
    starting at ‘*inbuf’, writing at most ‘*outbytesleft’ bytes starting at
@@ -87,13 +106,13 @@ extern iconv_t iconv_open (const char* tocode, const char* fromcode);
 #ifndef LIBICONV_PLUG
 #define iconv libiconv
 #endif
-extern size_t iconv (iconv_t cd, @ICONV_CONST@ char* * inbuf, size_t *inbytesleft, char* * outbuf, size_t *outbytesleft);
+extern LIBICONV_SHLIB_EXPORTED size_t iconv (iconv_t cd, char* * inbuf, size_t *inbytesleft, char* * outbuf, size_t *outbytesleft);
 
 /* Frees resources allocated for conversion descriptor ‘cd’. */
 #ifndef LIBICONV_PLUG
 #define iconv_close libiconv_close
 #endif
-extern int iconv_close (iconv_t cd);
+extern LIBICONV_SHLIB_EXPORTED int iconv_close (iconv_t cd);
 
 
 #ifdef __cplusplus
@@ -105,8 +124,8 @@ extern int iconv_close (iconv_t cd);
 
 /* Nonstandard extensions. */
 
-#if @USE_MBSTATE_T@
-#if @BROKEN_WCHAR_H@
+#if 1
+#if 0
 /* Tru64 with Desktop Toolkit C has a bug: <stdio.h> must be included before
    <wchar.h>.
    BSD/OS 4.0.1 has a bug: <stddef.h>, <stdio.h> and <time.h> must be
@@ -126,7 +145,7 @@ extern "C" {
    A pointer to such an object can be used as an iconv_t. */
 typedef struct {
   void* dummy1[28];
-#if @USE_MBSTATE_T@
+#if 1
   mbstate_t dummy2;
 #endif
 } iconv_allocation_t;
@@ -135,12 +154,12 @@ typedef struct {
    encoding ‘tocode’ into preallocated memory. Returns an error indicator
    (0 or -1 with errno set). */
 #define iconv_open_into libiconv_open_into
-extern int iconv_open_into (const char* tocode, const char* fromcode,
+extern LIBICONV_SHLIB_EXPORTED int iconv_open_into (const char* tocode, const char* fromcode,
                             iconv_allocation_t* resultp);
 
 /* Control of attributes. */
 #define iconvctl libiconvctl
-extern int iconvctl (iconv_t cd, int request, void* argument);
+extern LIBICONV_SHLIB_EXPORTED int iconvctl (iconv_t cd, int request, void* argument);
 
 /* Hook performed after every successful conversion of a Unicode character. */
 typedef void (*iconv_unicode_char_hook) (unsigned int uc, void* data);
@@ -173,7 +192,7 @@ typedef void (*iconv_unicode_uc_to_mb_fallback)
                                          void* callback_arg),
               void* callback_arg,
               void* data);
-#if @HAVE_WCHAR_T@
+#if 1
 /* Fallback function.  Invoked when a number of bytes could not be converted to
    a wide character.  This function should process all bytes from inbuf and may
    produce replacement wide characters by calling the write_replacement
@@ -232,14 +251,14 @@ struct iconv_fallbacks {
 
 /* Listing of locale independent encodings. */
 #define iconvlist libiconvlist
-extern void iconvlist (int (*do_one) (unsigned int namescount,
+extern LIBICONV_SHLIB_EXPORTED void iconvlist (int (*do_one) (unsigned int namescount,
                                       const char * const * names,
                                       void* data),
                        void* data);
 
 /* Canonicalize an encoding name.
    The result is either a canonical encoding name, or name itself. */
-extern const char * iconv_canonicalize (const char * name);
+extern LIBICONV_SHLIB_EXPORTED const char * iconv_canonicalize (const char * name);
 
 /* Support for relocatable packages.  */
 
@@ -248,7 +267,7 @@ extern const char * iconv_canonicalize (const char * name);
    by the corresponding pathname with the current prefix instead.  Both
    prefixes should be directory names without trailing slash (i.e. use ""
    instead of "/").  */
-extern void libiconv_set_relocation_prefix (const char *orig_prefix,
+extern LIBICONV_SHLIB_EXPORTED void libiconv_set_relocation_prefix (const char *orig_prefix,
                                             const char *curr_prefix);
 
 #ifdef __cplusplus

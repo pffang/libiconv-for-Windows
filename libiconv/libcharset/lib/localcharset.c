@@ -20,7 +20,7 @@
 #include <config.h>
 
 /* Specification.  */
-#include "localcharset.h"
+#include "localcharset.build.h"
 
 #include <stddef.h>
 #include <stdio.h>
