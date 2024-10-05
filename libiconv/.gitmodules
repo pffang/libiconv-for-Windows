@@ -1,0 +1,3 @@
+[subcheckout "gnulib"]
+	url = git://git.savannah.gnu.org/gnulib.git
+	path = gnulib

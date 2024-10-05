@@ -1,4 +1,4 @@
-/* Copyright (C) 1999-2022 Free Software Foundation, Inc.
+/* Copyright (C) 1999-2024 Free Software Foundation, Inc.
    This file is part of the GNU LIBICONV Library.
 
    The GNU LIBICONV Library is free software; you can redistribute it
@@ -20,8 +20,16 @@
 #ifndef _LIBICONV_H
 #define _LIBICONV_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define _LIBICONV_VERSION 0x0111    /* version number: (major<<8) + minor */
 extern __declspec (dllimport) int _libiconv_version; /* Likewise */
+
+#ifdef __cplusplus
+}
+#endif
 
 /* We would like to #include any system header file which could define
    iconv_t, 1. in order to eliminate the risk that the user gets compilation
@@ -165,7 +173,6 @@ typedef void (*iconv_unicode_uc_to_mb_fallback)
                                          void* callback_arg),
               void* callback_arg,
               void* data);
-#if 1
 /* Fallback function.  Invoked when a number of bytes could not be converted to
    a wide character.  This function should process all bytes from inbuf and may
    produce replacement wide characters by calling the write_replacement
@@ -186,12 +193,6 @@ typedef void (*iconv_wchar_wc_to_mb_fallback)
                                          void* callback_arg),
               void* callback_arg,
               void* data);
-#else
-/* If the wchar_t type does not exist, these two fallback functions are never
-   invoked.  Their argument list therefore does not matter.  */
-typedef void (*iconv_wchar_mb_to_wc_fallback) ();
-typedef void (*iconv_wchar_wc_to_mb_fallback) ();
-#endif
 /* Set of fallbacks. */
 struct iconv_fallbacks {
   iconv_unicode_mb_to_uc_fallback mb_to_uc_fallback;
@@ -201,6 +202,14 @@ struct iconv_fallbacks {
   void* data;
 };
 
+/* Surfaces.
+   The concept of surfaces is described in the 'recode' manual.  */
+#define ICONV_SURFACE_NONE             0
+/* In EBCDIC encodings, 0x15 (which encodes the "newline function", see the
+   Unicode standard, chapter 5) maps to U+000A instead of U+0085.  This is
+   for interoperability with C programs and Unix environments on z/OS.  */
+#define ICONV_SURFACE_EBCDIC_ZOS_UNIX  1
+
 /* Requests for iconvctl. */
 #define ICONV_TRIVIALP            0  /* int *argument */
 #define ICONV_GET_TRANSLITERATE   1  /* int *argument */
@@ -209,6 +218,10 @@ struct iconv_fallbacks {
 #define ICONV_SET_DISCARD_ILSEQ   4  /* const int *argument */
 #define ICONV_SET_HOOKS           5  /* const struct iconv_hooks *argument */
 #define ICONV_SET_FALLBACKS       6  /* const struct iconv_fallbacks *argument */
+#define ICONV_GET_FROM_SURFACE    7  /* unsigned int *argument */
+#define ICONV_SET_FROM_SURFACE    8  /* const unsigned int *argument */
+#define ICONV_GET_TO_SURFACE      9  /* unsigned int *argument */
+#define ICONV_SET_TO_SURFACE     10  /* const unsigned int *argument */
 
 /* Listing of locale independent encodings. */
 #define iconvlist libiconvlist

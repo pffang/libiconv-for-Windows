@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1999-2009 Free Software Foundation, Inc.
+ * Copyright (C) 1999-2009, 2023 Free Software Foundation, Inc.
  * This file is part of the GNU LIBICONV Library.
  *
  * The GNU LIBICONV Library is free software; you can redistribute it
@@ -22,8 +22,10 @@
      struct conv_struct * cd;
      unsigned int from_index;
      int from_wchar;
+     unsigned int from_surface;
      unsigned int to_index;
      int to_wchar;
+     unsigned int to_surface;
      int transliterate;
      int discard_ilseq;
    Output: none.
@@ -62,6 +64,9 @@
       cd->lfuncs.loop_reset = unicode_loop_reset;
     }
   }
+  /* Initialize the surfaces. */
+  cd->isurface = from_surface;
+  cd->osurface = to_surface;
   /* Initialize the states. */
   memset(&cd->istate,'\0',sizeof(state_t));
   memset(&cd->ostate,'\0',sizeof(state_t));
