@@ -1,3 +1,19 @@
+New in 1.18:
+* Many more transliterations.
+* GB18030 is now an alias for GB18030:2005. A new converter for GB18030:2022
+  is added. Since this encoding merely cleans up a few private-use-area
+  mappings, you can continue to use the GB18030 converter, for backward
+  compatibility. Its Unicode to GB18030 conversion direction has been
+  enhanced, to help transitioning away from PUA code points.
+* When converting from/to an EBCDIC encoding, a non-standard way of
+  converting newlines can be requested
+    - at the C level, by calling iconvctl with argument ICONV_SET_FROM_SURFACE
+      or ICONV_SET_TO_SURFACE, or
+    - from the iconv program, by setting the environment variable
+      ICONV_EBCDIC_ZOS_UNIX to a non-empty value.
+* Special support for z/OS: The iconv program adds a charset metadata tag to
+  its output file. (Contributed by Mike Fulton.)
+
 New in 1.17:
 * The libiconv library is now licensed under the LGPL version 2.1, instead of
   the LGPL version 2.0. The iconv program continues to be licensed under GPL

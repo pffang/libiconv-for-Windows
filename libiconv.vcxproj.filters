@@ -41,9 +41,6 @@
     <ClCompile Include="libiconv\lib\iconv.c">
       <Filter>libiconv\lib</Filter>
     </ClCompile>
-    <ClCompile Include="libiconv\lib\relocatable.c">
-      <Filter>libiconv\lib</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\iconv.h">
@@ -58,8 +55,8 @@
     <ClInclude Include="libiconv\libcharset\include\localcharset.h">
       <Filter>libiconv\libcharset\include</Filter>
     </ClInclude>
-    <ClInclude Include="libiconv\libcharset\config.h">
-      <Filter>libiconv\libcharset</Filter>
+    <ClInclude Include="libiconv\config.h">
+      <Filter>libiconv</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

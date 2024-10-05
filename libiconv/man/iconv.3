@@ -9,7 +9,7 @@
 .\"   GNU glibc-2 source code and manual
 .\"   OpenGroup's Single Unix specification http://www.UNIX-systems.org/online.html
 .\"
-.TH ICONV 3  "September 7, 2008" "GNU" "Linux Programmer's Manual"
+.TH ICONV 3  "May 24, 2023" "GNU"
 .SH NAME
 iconv \- perform character set conversion
 .SH SYNOPSIS
@@ -38,7 +38,7 @@ output bytes, and it updates the conversion state contained in \fIcd\fP.
 If the character encoding of the input is stateful, the \fBiconv\fP function
 can also convert a sequence of input bytes to an update of the conversion state
 without producing any output bytes; such input is called a \fIshift sequence\fP.
-The conversion can stop for four reasons:
+The conversion can stop for five reasons:
 .PP
 1. An invalid multibyte sequence is encountered in the input. In this case
 it sets \fBerrno\fP to \fBEILSEQ\fP and returns (size_t)(\-1). \fI*inbuf\fP
@@ -53,7 +53,26 @@ input byte sequence terminates after it. In this case it sets \fBerrno\fP to
 \fBEINVAL\fP and returns (size_t)(\-1). \fI*inbuf\fP is left pointing to the
 beginning of the incomplete multibyte sequence.
 .PP
-4. The output buffer has no more room for the next converted character. In
+4. A multibyte sequence is encountered that is valid but that cannot be
+translated to the character encoding of the output.
+This condition depends on the implementation and on the conversion
+descriptor.
+In the GNU C library and GNU libiconv, if \fIcd\fP was created without the
+suffix \fB//TRANSLIT\fP or \fB//IGNORE\fP, the conversion is strict: lossy
+conversions produce this condition.
+If the suffix \fB//TRANSLIT\fP was specified, transliteration can avoid this
+condition in some cases.
+In the musl C library, this condition cannot occur because a conversion to
+\fB\[aq]*\[aq]\fP is used as a fallback.
+In the FreeBSD, NetBSD, and Solaris implementations of \fBiconv\fP, this
+condition cannot occur either, because a conversion to \fB\[aq]?\[aq]\fP is
+used as a fallback.
+When this condition is met, the \fBiconv\fP function sets \fBerrno\fP to
+\fBEILSEQ\fP and returns (size_t)(\-1).
+\fI*inbuf\fP is left pointing to the beginning of the unconvertible multibyte
+sequence.
+.PP
+5. The output buffer has no more room for the next converted character. In
 this case it sets \fBerrno\fP to \fBE2BIG\fP and returns (size_t)(\-1).
 .PP
 A different case is when \fIinbuf\fP is NULL or \fI*inbuf\fP is NULL, but

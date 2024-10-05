@@ -48,3 +48,30 @@ jobs:
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{matrix.BUILD_CONFIGURATION}} /p:Platform=${{matrix.BUILD_PLATFORM}} ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: libiconv-for-Windows_${{matrix.BUILD_PLATFORM}}_${{matrix.BUILD_CONFIGURATION}}
+        path: |
+          output/
+
+  UploadArtifactAndReleas:
+    runs-on: windows-latest
+    if: ${{ always() }}
+    needs: build_matrix
+    steps:
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: libiconv-for-Windows_prebuilt
+        path: |
+          output/
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        body_path: libiconv/ChangeLog
+        files: |
+          output/
