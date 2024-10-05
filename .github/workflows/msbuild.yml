@@ -49,14 +49,7 @@ jobs:
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{matrix.BUILD_CONFIGURATION}} /p:Platform=${{matrix.BUILD_PLATFORM}} ${{env.SOLUTION_FILE_PATH}}
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: libiconv-for-Windows_${{matrix.BUILD_PLATFORM}}_${{matrix.BUILD_CONFIGURATION}}
-        path: |
-          output/
-
-  UploadArtifactAndReleas:
+  UploadArtifactAndRelease:
     runs-on: windows-latest
     if: ${{ always() }}
     needs: build_matrix
