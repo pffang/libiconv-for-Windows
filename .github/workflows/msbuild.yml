@@ -21,7 +21,7 @@ env:
   BUILD_CONFIGURATION: Release
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build_matrix:
@@ -49,22 +49,44 @@ jobs:
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{matrix.BUILD_CONFIGURATION}} /p:Platform=${{matrix.BUILD_PLATFORM}} ${{env.SOLUTION_FILE_PATH}}
 
-  UploadArtifactAndRelease:
-    runs-on: windows-latest
-    if: ${{ always() }}
-    needs: build_matrix
-    steps:
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: libiconv-for-Windows_prebuilt
-        path: |
-          output/
+        name: libiconv-for-Windows_prebuilt_${{matrix.BUILD_PLATFORM}}_${{matrix.BUILD_CONFIGURATION}}
+        path: output/
 
+  UploadArtifactAndRelease:
+    runs-on: windows-latest
+    needs: build_matrix
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        sparse-checkout: |
+          libiconv/ChangeLog
+        sparse-checkout-cone-mode: false
+
+    - name: Download All Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: libiconv-for-Windows_prebuilt*
+        path: ${{github.workspace}}/output
+        merge-multiple: true
+    
+    - name: Display structure of workspace
+      run: ls -R .
+      working-directory: ${{github.workspace}}
+    
+    - name: Package
+      run: |
+        Compress-Archive -Path output/* -Destination output/libiconv-for-Windows_prebuilt.zip
+        ls output/*.zip
+      working-directory: ${{github.workspace}}
+    
     - name: Release
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        body_path: libiconv/ChangeLog
-        files: |
-          output/
+        token: ${{ secrets.RELEASETOKEN }}
+        body_path: ${{env.GITHUB_WORKSPACE}}/libiconv/ChangeLog
+        files: ${{github.workspace}}/output/libiconv-for-Windows_prebuilt.zip
