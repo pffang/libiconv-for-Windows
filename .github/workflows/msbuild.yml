@@ -5,23 +5,7 @@
 
 name: MSBuild
 
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
-env:
-  # Path to the solution file relative to the root of the project.
-  SOLUTION_FILE_PATH: .
-
-  # Configuration type to build.
-  # You can convert this to a build matrix if you need coverage of multiple configuration types.
-  # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-  BUILD_CONFIGURATION: Release
-
-permissions:
-  contents: write
+on: [push, pull_request] 
 
 jobs:
   build_matrix:
@@ -39,14 +23,8 @@ jobs:
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2
 
-    - name: Restore NuGet packages
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
-
     - name: Build
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      # Add additional options to the MSBuild command line here (like platform or verbosity level).
-      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
+      working-directory: ${{github.workspace}}
       run: msbuild /m /p:Configuration=${{matrix.BUILD_CONFIGURATION}} /p:Platform=${{matrix.BUILD_PLATFORM}} ${{env.SOLUTION_FILE_PATH}}
 
     - name: Upload artifact
@@ -63,6 +41,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         sparse-checkout: |
+          include/iconv.h
           libiconv/ChangeLog
         sparse-checkout-cone-mode: false
 
@@ -79,7 +58,7 @@ jobs:
     
     - name: Package
       run: |
-        Compress-Archive -Path output/* -Destination output/libiconv-for-Windows_prebuilt.zip
+        Compress-Archive -Path include/iconv.h,output/* -Destination output/libiconv-for-Windows_prebuilt.zip -Force
         ls output/*.zip
       working-directory: ${{github.workspace}}
     
@@ -88,5 +67,5 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       with:
         token: ${{ secrets.RELEASETOKEN }}
-        body_path: ${{env.GITHUB_WORKSPACE}}/libiconv/ChangeLog
+        body_path: ${{github.workspace}}/libiconv/ChangeLog
         files: ${{github.workspace}}/output/libiconv-for-Windows_prebuilt.zip
