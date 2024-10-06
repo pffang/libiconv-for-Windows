@@ -8,7 +8,7 @@ Solution file updated to Visual Studio 2022 **only**.
 
 ## Version
 
-`libiconv` library version `1.17`
+`libiconv` library version `1.18-eed6782`
 
 # How To Build
 
@@ -100,5 +100,4 @@ Refer to the GNU license provided by `libiconv` [LGPL3.0][3].
 [1]: https://www.gnu.org/software/libiconv
 [2]: http://www.codeproject.com/Articles/302012/How-to-Build-libiconv-with-Microsoft-Visual-Studio
 [3]: https://www.gnu.org/licenses/lgpl.html
-[ 4 ]: https://visualstudio.microsoft.com/vs/community/
-
+[4]: https://visualstudio.microsoft.com/vs/community/

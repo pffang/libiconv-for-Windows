@@ -42,7 +42,7 @@ jobs:
       with:
         sparse-checkout: |
           include/iconv.h
-          libiconv/ChangeLog
+          ReleaseNote
         sparse-checkout-cone-mode: false
 
     - name: Download All Artifacts
@@ -52,9 +52,9 @@ jobs:
         path: ${{github.workspace}}/output
         merge-multiple: true
     
-    - name: Display structure of workspace
-      run: ls -R .
-      working-directory: ${{github.workspace}}
+    # - name: Display structure of workspace
+    #   run: ls -R .
+    #   working-directory: ${{github.workspace}}
     
     - name: Package
       run: |
@@ -67,5 +67,5 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       with:
         token: ${{ secrets.RELEASETOKEN }}
-        body_path: ${{github.workspace}}/libiconv/ChangeLog
+        body_path: ${{github.workspace}}/ReleaseNote
         files: ${{github.workspace}}/output/libiconv-for-Windows_prebuilt.zip
