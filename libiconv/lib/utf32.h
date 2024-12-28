@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1999-2001, 2008, 2011, 2016, 2024 Free Software Foundation, Inc.
+ * Copyright (C) 1999-2024 Free Software Foundation, Inc.
  * This file is part of the GNU LIBICONV Library.
  *
  * The GNU LIBICONV Library is free software; you can redistribute it
@@ -33,7 +33,7 @@
 static int
 utf32_mbtowc (conv_t conv, ucs4_t *pwc, const unsigned char *s, size_t n)
 {
-  state_t state = conv->istate;
+  state_t state = conv->ibyteorder;
   int count = 0;
   for (; n >= 4 && count <= RET_COUNT_MAX && count <= INT_MAX-4;) {
     ucs4_t wc = (state
@@ -51,16 +51,16 @@ utf32_mbtowc (conv_t conv, ucs4_t *pwc, const unsigned char *s, size_t n)
     } else {
       if (wc < 0x110000 && !(wc >= 0xd800 && wc < 0xe000)) {
         *pwc = wc;
-        conv->istate = state;
+        conv->ibyteorder = state;
         return count+4;
       } else {
-        conv->istate = state;
+        conv->ibyteorder = state;
         return RET_SHIFT_ILSEQ(count);
       }
     }
     s += 4; n -= 4; count += 4;
   }
-  conv->istate = state;
+  conv->ibyteorder = state;
   return RET_TOOFEW(count);
 }
 

@@ -1,3 +1,32 @@
+2024-12-14  Bruno Haible  <bruno@clisp.org>
+
+	Switch to automake 1.17.
+	* autogen.sh: Update comment.
+
+2024-11-22  Bruno Haible  <bruno@clisp.org>
+
+	Switch to libtool 2.5.4.
+	* m4/libtool.m4: Update from libtool-2.5.4, with modifications:
+	2008-04-06  Bruno Haible  <bruno@clisp.org>
+		* m4/libtool.m4 (LT_INIT): When setting LIBTOOL, use
+		CONFIG_SHELL; don't assume that the Makefile.in will set SHELL
+		to ${CONFIG_SHELL}.
+	* m4/ltversion.m4: Likewise.
+	* build-aux/ltmain.sh: Update from libtool-2.5.4, with modifications:
+	2017-07-15  Bruno Haible  <bruno@clisp.org>
+		Allow building statically linked binaries, through
+		LDFLAGS="-static". Apply patch from
+		<https://lists.gnu.org/archive/html/bug-libtool/2017-07/msg00000.html>.
+		* build-aux/ltmain.sh (func_mode_help, func_mode_link): In the
+		link mode, accept option '-static-uninstalled-libs' in place of
+		'-static', and make '-static' an equivalent of '-all-static'.
+
+2024-11-07  Bruno Haible  <bruno@clisp.org>
+
+	Update the LGPL text.
+	* COPYING.LIB: Update from
+	<https://ftp.gnu.org/gnu/Licenses/lgpl-2.1.txt>.
+
 2024-09-26  Bruno Haible  <bruno@clisp.org>
 
 	Switch to libtool 2.5.3.

@@ -69,3 +69,4 @@ packages/
 #Test files
 *.testsettings
 .vs/
+/.vscode

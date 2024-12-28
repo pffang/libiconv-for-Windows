@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1999-2008, 2011, 2018, 2020, 2023 Free Software Foundation, Inc.
+ * Copyright (C) 1999-2024 Free Software Foundation, Inc.
  * This file is part of the GNU LIBICONV Library.
  *
  * The GNU LIBICONV Library is free software; you can redistribute it
@@ -27,8 +27,8 @@
      int to_wchar;
      unsigned int to_surface;
      int transliterate;
-     int discard_ilseq;
-   Jumps to 'invalid' in case of errror.
+     unsigned int discard_ilseq;
+   Jumps to 'invalid' in case of error.
  */
 {
   char buf[MAX_WORD_LENGTH+9+9+1];
@@ -65,25 +65,36 @@
       char *sp = bp;
       int parsed_translit = 0;
       int parsed_ignore = 0;
-      if (sp-buf > 9 && memcmp(sp-9,"/TRANSLIT",9)==0) {
-        sp = sp - 9;
-        parsed_translit = 1;
-      } else if (sp-buf > 7 && memcmp(sp-7,"/IGNORE",7)==0) {
-        sp = sp - 7;
-        parsed_ignore = 1;
+      int parsed_non_identical_discard = 0;
+      for (;;) {
+        if (sp-buf > 9 && memcmp(sp-9,"/TRANSLIT",9)==0) {
+          sp = sp - 9;
+          parsed_translit = 1;
+        } else if (sp-buf > 7 && memcmp(sp-7,"/IGNORE",7)==0) {
+          sp = sp - 7;
+          parsed_ignore = 1;
+        } else if (sp-buf > 22 && memcmp(sp-22,"/NON_IDENTICAL_DISCARD",22)==0) {
+          sp = sp - 22;
+          parsed_non_identical_discard = 1;
+        } else
+          break;
+        if (sp > buf && sp[-1] == '/')
+          sp = sp - 1;
       }
-      if (sp > buf && memcmp(sp-1,"/",1) == 0) {
+      if (sp > buf && sp[-1] == '/') {
         bp = sp - 1;
       } else if (sp-buf >= 9 && memcmp(sp-9,"/ZOS_UNIX",9)==0) {
         bp = sp - 9;
         to_surface = ICONV_SURFACE_EBCDIC_ZOS_UNIX;
       } else
-        break;
+        bp = sp;
       *bp = '\0';
       if (parsed_translit)
         transliterate = 1;
       if (parsed_ignore)
-        discard_ilseq = 1;
+        discard_ilseq |= DISCARD_INVALID | DISCARD_UNCONVERTIBLE;
+      if (parsed_non_identical_discard)
+        discard_ilseq |= DISCARD_UNCONVERTIBLE;
       break;
     }
     if (buf[0] == '\0') {
@@ -167,25 +178,36 @@
       char *sp = bp;
       int parsed_translit = 0;
       int parsed_ignore = 0;
-      if (sp-buf > 9 && memcmp(sp-9,"/TRANSLIT",9)==0) {
-        sp = sp - 9;
-        parsed_translit = 1;
-      } else if (sp-buf > 7 && memcmp(sp-7,"/IGNORE",7)==0) {
-        sp = sp - 7;
-        parsed_ignore = 1;
+      int parsed_non_identical_discard = 0;
+      for (;;) {
+        if (sp-buf > 9 && memcmp(sp-9,"/TRANSLIT",9)==0) {
+          sp = sp - 9;
+          parsed_translit = 1;
+        } else if (sp-buf > 7 && memcmp(sp-7,"/IGNORE",7)==0) {
+          sp = sp - 7;
+          parsed_ignore = 1;
+        } else if (sp-buf > 22 && memcmp(sp-22,"/NON_IDENTICAL_DISCARD",22)==0) {
+          sp = sp - 22;
+          parsed_non_identical_discard = 1;
+        } else
+          break;
+        if (sp > buf && sp[-1] == '/')
+          sp = sp - 1;
       }
-      if (sp > buf && memcmp(sp-1,"/",1) == 0) {
+      if (sp > buf && sp[-1] == '/') {
         bp = sp - 1;
       } else if (sp-buf >= 9 && memcmp(sp-9,"/ZOS_UNIX",9)==0) {
         bp = sp - 9;
         from_surface = ICONV_SURFACE_EBCDIC_ZOS_UNIX;
       } else
-        break;
+        bp = sp;
       *bp = '\0';
       if (parsed_translit)
         transliterate = 1;
       if (parsed_ignore)
-        discard_ilseq = 1;
+        discard_ilseq |= DISCARD_INVALID | DISCARD_UNCONVERTIBLE;
+      if (parsed_non_identical_discard)
+        discard_ilseq |= DISCARD_UNCONVERTIBLE;
       break;
     }
     if (buf[0] == '\0') {

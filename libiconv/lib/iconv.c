@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1999-2008, 2011, 2016, 2018, 2020, 2022-2023 Free Software Foundation, Inc.
+ * Copyright (C) 1999-2024 Free Software Foundation, Inc.
  * This file is part of the GNU LIBICONV Library.
  *
  * The GNU LIBICONV Library is free software; you can redistribute it
@@ -241,7 +241,7 @@ iconv_t iconv_open (const char* tocode, const char* fromcode)
   int to_wchar;
   unsigned int to_surface;
   int transliterate;
-  int discard_ilseq;
+  unsigned int discard_ilseq;
 
 #include "iconv_open1.h"
 
@@ -281,8 +281,6 @@ int iconv_close (iconv_t icd)
   return 0;
 }
 
-#ifndef LIBICONV_PLUG
-
 /*
  * Verify that a 'struct conv_struct' and a 'struct wchar_conv_struct' each
  * fit in an iconv_allocation_t.
@@ -305,7 +303,7 @@ int iconv_open_into (const char* tocode, const char* fromcode,
   int to_wchar;
   unsigned int to_surface;
   int transliterate;
-  int discard_ilseq;
+  unsigned int discard_ilseq;
 
 #include "iconv_open1.h"
 
@@ -340,11 +338,33 @@ int iconvctl (iconv_t icd, int request, void* argument)
     case ICONV_SET_TRANSLITERATE:
       cd->transliterate = (*(const int *)argument ? 1 : 0);
       return 0;
+    case ICONV_GET_DISCARD_INVALID:
+      *(int *)argument = (cd->discard_ilseq & DISCARD_INVALID ? 1 : 0);
+      return 0;
+    case ICONV_SET_DISCARD_INVALID:
+      if (*(const int *)argument)
+        cd->discard_ilseq |= DISCARD_INVALID;
+      else
+        cd->discard_ilseq &= ~DISCARD_INVALID;
+      return 0;
+    case ICONV_GET_DISCARD_NON_IDENTICAL:
+      *(int *)argument = (cd->discard_ilseq & DISCARD_UNCONVERTIBLE ? 1 : 0);
+      return 0;
+    case ICONV_SET_DISCARD_NON_IDENTICAL:
+      if (*(const int *)argument)
+        cd->discard_ilseq |= DISCARD_UNCONVERTIBLE;
+      else
+        cd->discard_ilseq &= ~DISCARD_UNCONVERTIBLE;
+      return 0;
     case ICONV_GET_DISCARD_ILSEQ:
-      *(int *)argument = cd->discard_ilseq;
+      *(int *)argument =
+        ((DISCARD_INVALID | DISCARD_UNCONVERTIBLE) & ~ cd->discard_ilseq) == 0;
       return 0;
     case ICONV_SET_DISCARD_ILSEQ:
-      cd->discard_ilseq = (*(const int *)argument ? 1 : 0);
+      if (*(const int *)argument)
+        cd->discard_ilseq |= DISCARD_INVALID | DISCARD_UNCONVERTIBLE;
+      else
+        cd->discard_ilseq &= ~(DISCARD_INVALID | DISCARD_UNCONVERTIBLE);
       return 0;
     case ICONV_SET_HOOKS:
       if (argument != NULL) {
@@ -654,6 +674,4 @@ int _libiconv_version = _LIBICONV_VERSION;
 strong_alias (libiconv_open, iconv_open)
 strong_alias (libiconv, iconv)
 strong_alias (libiconv_close, iconv_close)
-#endif
-
 #endif

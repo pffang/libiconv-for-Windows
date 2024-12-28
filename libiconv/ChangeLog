@@ -1,3 +1,165 @@
+2024-12-15  Bruno Haible  <bruno@clisp.org>
+
+	Update translations.
+	* po/libiconv.pot: Update.
+	* po/*.po: Update from TP.
+	* po/LINGUAS: Add be, ka.
+
+2024-12-15  Bruno Haible  <bruno@clisp.org>
+
+	Prepare for version 1.18.
+	* configure.ac: Bump version number to 1.18.
+	* include/iconv.h.in (_LIBICONV_VERSION): Likewise.
+	* lib/Makefile.in (LIBICONV_VERSION_INFO): Bump to 9:0:7.
+	* src/iconv.c (print_version): Update copyright year.
+	* windows/iconv.rc: Likewise.
+	* windows/libiconv.rc: Likewise.
+	* README: Update download link.
+
+2024-12-15  Bruno Haible  <bruno@clisp.org>
+
+	Use the newest gettext release.
+	* po/Makefile.in.in: Upgrade to gettext-0.23, keeping the change
+		2019-01-27  Bruno Haible  <bruno@clisp.org>
+		Accommodate a shell that is not in /bin/sh.
+		* po/Makefile.in.in (SHELL): Use the value found by configure.
+	* po/*: Upgrade to gettext-0.23 as well.
+
+2024-12-15  Bruno Haible  <bruno@clisp.org>
+
+	Implement the //NON_IDENTICAL_DISCARD suffix from POSIX:2024.
+	* include/iconv.h.in (ICONV_GET_DISCARD_INVALID,
+	ICONV_SET_DISCARD_INVALID, ICONV_GET_DISCARD_NON_IDENTICAL,
+	ICONV_SET_DISCARD_NON_IDENTICAL): New macros.
+	* lib/converters.h (struct conv_struct): Change type of discard_ilseq to
+	'unsigned int'.
+	(DISCARD_INVALID, DISCARD_UNCONVERTIBLE): New macros.
+	* lib/iconv.c (iconv_open, iconv_open_into): Change type of
+	discard_ilseq to 'unsigned int'.
+	(iconvctl): Implement ICONV_GET_DISCARD_INVALID,
+	ICONV_SET_DISCARD_INVALID, ICONV_GET_DISCARD_NON_IDENTICAL,
+	ICONV_SET_DISCARD_NON_IDENTICAL. Change the implementation of
+	ICONV_GET_DISCARD_ILSEQ, ICONV_SET_DISCARD_ILSEQ to test/set both bits.
+	* lib/iconv_open1.h: Update comment. Recognize //NON_IDENTICAL_DISCARD.
+	* lib/iconv_open2.h: Update comment.
+	* lib/loop_unicode.h (mb_to_uc_write_replacement): Test the
+	DISCARD_UNCONVERTIBLE bit of discard_ilseq.
+	(unicode_loop_convert): Test the respective bit of discard_ilseq.
+	(unicode_loop_reset): Test the DISCARD_UNCONVERTIBLE bit of
+	discard_ilseq.
+	* lib/loop_wchar.h (wchar_from_loop_convert, wchar_to_loop_convert):
+	Test the DISCARD_INVALID bit of discard_ilseq.
+	* man/iconv_open.3: Mention the //NON_IDENTICAL_DISCARD suffix. Mark as
+	conforming to POSIX:2024.
+	* man/iconv.3: Likewise.
+	* man/iconv_close.3: Mark as conforming to POSIX:2024.
+	* man/iconv.1: Likewise.
+	* man/iconvctl.3: Document ICONV_GET_DISCARD_INVALID,
+	ICONV_SET_DISCARD_INVALID, ICONV_GET_DISCARD_NON_IDENTICAL,
+	ICONV_SET_DISCARD_NON_IDENTICAL. Revise the description of
+	ICONV_GET_DISCARD_ILSEQ, ICONV_SET_DISCARD_ILSEQ.
+	* tests/test-discard.c (test_default, test_translit, test_ignore,
+	test_ignore_translit): Test also the ICONV_GET_DISCARD_INVALID,
+	ICONV_GET_DISCARD_NON_IDENTICAL accessors.
+	(test_nid, test_nid_translit, test_invd, test_invd_translit): New
+	functions.
+	(main): Add test cases with //NON_IDENTICAL_DISCARD suffix.
+	* NEWS: Mention the change.
+
+2024-12-15  Bruno Haible  <bruno@clisp.org>
+
+	Support multiple suffixes in iconv_open, like glibc does.
+	* lib/iconv_open1.h: Use a loop when looking for the common suffixes.
+	* tests/test-discard.c: New file.
+	* tests/Makefile.in (check): Run test-discard.
+	(test-discard, test-discard.@OBJEXT@): New targets.
+	(clean): Remove test-discard.
+	(SOURCE_FILES): Add test-discard.c.
+	* NEWS: Mention the change.
+
+2024-12-14  Bruno Haible  <bruno@clisp.org>
+
+	Switch to automake 1.17, part 2.
+	* Makefile.devel (AUTOMAKE, ACLOCAL): Use binary from automake 1.17.
+
+2024-12-14  Bruno Haible  <bruno@clisp.org>
+
+	Remove left-overs of preloadable library (removed in 1.16).
+	* include/iconv.h.in: Remove LIBICONV_PLUG conditionals.
+	* lib/iconv.c: Likewise.
+	* lib/converters.h: Likewise.
+	* lib/loop_unicode.h: Likewise.
+	* lib/loop_wchar.h: Likewise.
+	* lib/iconv_open2.h: Likewise.
+
+2024-12-14  Bruno Haible  <bruno@clisp.org>
+
+	Add transliteration of Emojis.
+	Suggested by Colin Leroy-Mira <colin@colino.net> in
+	<https://savannah.gnu.org/bugs/index.php?64046>.
+	* lib/translit.def: Add transliterations from glibc's fix of
+	<https://sourceware.org/bugzilla/show_bug.cgi?id=30649>.
+	* NEWS: Mention it.
+
+2024-12-14  Bruno Haible  <bruno@clisp.org>
+
+	Improve man page.
+	* man/iconv.3: Move 4th case to be the 2nd case. Add a NOTES section,
+	based on the Linux man-pages project's iconv.3 page.
+
+2024-12-13  Bruno Haible  <bruno@clisp.org>
+
+	Distinguish byte-order state and shift-state.
+	Reported by Tomas Kalibera <tomas.kalibera@gmail.com> in
+	<https://lists.gnu.org/archive/html/bug-gnu-libiconv/2024-12/msg00000.html>.
+	* lib/converters.h (struct conv_struct): Add field 'ibyteorder'.
+	* lib/iconv_open2.h: Initialize the ibyteorder field.
+	* lib/ucs2.h (ucs2_mbtowc): Use the ibyteorder field instead of the
+	istate field.
+	* lib/ucs4.h (ucs4_mbtowc): Likewise.
+	* lib/utf16.h (utf16_mbtowc): Likewise.
+	* lib/utf32.h (utf32_mbtowc): Likewise.
+	* tests/test-bom-state.c: New file.
+	* tests/Makefile.in (check): Run test-bom-state.
+	(test-bom-state, test-bom-state.@OBJEXT@): New targets.
+	(clean): Remove test-bom-state.
+	(SOURCE_FILES): Add test-bom-state.c.
+	* NEWS: Mention the change.
+
+2024-11-22  Bruno Haible  <bruno@clisp.org>
+
+	Switch to libtool 2.5.4.
+	* m4/libtool.m4: Update from libtool-2.5.4, with modifications:
+	2008-04-06  Bruno Haible  <bruno@clisp.org>
+		* m4/libtool.m4 (LT_INIT): When setting LIBTOOL, use
+		CONFIG_SHELL; don't assume that the Makefile.in will set SHELL
+		to ${CONFIG_SHELL}.
+	* m4/ltversion.m4: Likewise.
+	* build-aux/ltmain.sh: Update from libtool-2.5.4, with modifications:
+	2017-07-15  Bruno Haible  <bruno@clisp.org>
+		Allow building statically linked binaries, through
+		LDFLAGS="-static". Apply patch from
+		<https://lists.gnu.org/archive/html/bug-libtool/2017-07/msg00000.html>.
+		* build-aux/ltmain.sh (func_mode_help, func_mode_link): In the
+		link mode, accept option '-static-uninstalled-libs' in place of
+		'-static', and make '-static' an equivalent of '-all-static'.
+
+2024-11-07  Bruno Haible  <bruno@clisp.org>
+
+	Update the LGPL text.
+	* COPYING.LIB: Update from
+	<https://ftp.gnu.org/gnu/Licenses/lgpl-2.1.txt>.
+
+2024-10-22  Bruno Haible  <bruno@clisp.org>
+
+	Spelling fixes.
+	From Mike Taves <mwtoews@gmail.com> in
+	<https://lists.gnu.org/archive/html/bug-gnu-libiconv/2024-10/msg00002.html>.
+	* NOTES: Fix grammar.
+	* lib/iconv_open1.h: Fix a typo in comments.
+	* lib/iso2022_jp2.h: Likewise.
+	* lib/iso2022_jpms.h: Fix English spelling in comments.
+
 2024-10-04  Bruno Haible  <bruno@clisp.org>
 
 	Fix undefined behaviour caused by shifting (unsigned char) << 24.

@@ -9,7 +9,7 @@
 .\" References consulted:
 .\"   iconv.h
 .\"
-.TH ICONVCTL 3  "April 3, 2023" "GNU"
+.TH ICONVCTL 3  "December 15, 2024" "GNU"
 .SH NAME
 iconvctl \- control iconv behavior
 .SH SYNOPSIS
@@ -41,15 +41,36 @@ transliteration is enabled in the conversion, or 0 otherwise.
 A non-zero value is used to enable transliteration in the conversion. A zero
 value disables it.
 .TP
+.B ICONV_GET_DISCARD_INVALID
+\fIargument\fP should be an \fBint *\fP which will receive 1 if "discard
+invalid multibyte sequence from the input and continue"
+is enabled in the conversion, or 0 otherwise.
+.TP
+.B ICONV_SET_DISCARD_INVALID
+\fIargument\fP should be a \fBconst int *\fP, pointing to an \fBint\fP value.
+A non-zero value is used to enable "discard
+invalid multibyte sequence from the input and continue"
+in the conversion. A zero value disables it.
+.TP
+.B ICONV_GET_DISCARD_NON_IDENTICAL
+\fIargument\fP should be an \fBint *\fP which will receive 1 if "discard
+character that cannot be represented in the target character set and continue"
+is enabled in the conversion, or 0 otherwise.
+.TP
+.B ICONV_SET_DISCARD_NON_IDENTICAL
+\fIargument\fP should be a \fBconst int *\fP, pointing to an \fBint\fP value.
+A non-zero value is used to enable "discard
+character that cannot be represented in the target character set and continue"
+in the conversion. A zero value disables it.
+.TP
 .B ICONV_GET_DISCARD_ILSEQ
-\fIargument\fP should be an \fBint *\fP which will receive 1 if 
-"illegal sequence discard and continue" is enabled in the conversion,
-or 0 otherwise.
+\fIargument\fP should be an \fBint *\fP which will receive 1 if both "discard"
+behaviours are enabled in the conversion, or 0 otherwise.
 .TP
 .B ICONV_SET_DISCARD_ILSEQ
 \fIargument\fP should be a \fBconst int *\fP, pointing to an \fBint\fP value.
-A non-zero value is used to enable "illegal sequence discard and continue"
-in the conversion. A zero value disables it.
+A non-zero value is used to enable both "discard" behaviours in the conversion.
+A zero value disables them.
 .TP
 .B ICONV_GET_FROM_SURFACE
 \fIargument\fP should be an \fBunsigned int *\fP which will receive the

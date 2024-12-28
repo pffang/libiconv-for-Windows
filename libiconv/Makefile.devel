@@ -13,8 +13,8 @@ SHELL = /bin/sh
 MAKE = make
 AUTOCONF = autoconf
 AUTOHEADER = autoheader
-AUTOMAKE = automake-1.16
-ACLOCAL = aclocal-1.16
+AUTOMAKE = automake-1.17
+ACLOCAL = aclocal-1.17
 GPERF = gperf
 
 # Ignore the built-in default for CC. Also ignore $(CC) if it is empty.

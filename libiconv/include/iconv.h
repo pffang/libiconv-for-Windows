@@ -24,7 +24,7 @@
 extern "C" {
 #endif
 
-#define _LIBICONV_VERSION 0x0111    /* version number: (major<<8) + minor */
+#define _LIBICONV_VERSION 0x0112    /* version number: (major<<8) + minor */
 
 #if 0 && BUILDING_LIBICONV
 # define LIBICONV_SHLIB_EXPORTED __attribute__((__visibility__("default")))
@@ -53,21 +53,16 @@ extern LIBICONV_SHLIB_EXPORTED __declspec (dllimport) int _libiconv_version; /* 
 #endif
 
 /* We would like to #include any system header file which could define
-   iconv_t, 1. in order to eliminate the risk that the user gets compilation
+   iconv_t, in order to eliminate the risk that the user gets compilation
    errors because some other system header file includes /usr/include/iconv.h
-   which defines iconv_t or declares iconv after this file, 2. when compiling
-   for LIBICONV_PLUG, we need the proper iconv_t type in order to produce
-   binary compatible code.
+   which defines iconv_t or declares iconv after this file.
    But gcc's #include_next is not portable. Thus, once libiconv's iconv.h
    has been installed in /usr/local/include, there is no way any more to
    include the original /usr/include/iconv.h. We simply have to get away
    without it.
-   Ad 1. The risk that a system header file does
+   The risk that a system header file does
    #include "iconv.h"  or  #include_next "iconv.h"
-   is small. They all do #include <iconv.h>.
-   Ad 2. The iconv_t type is a pointer type in all cases I have seen. (It
-   has to be a scalar type because (iconv_t)(-1) is a possible return value
-   from iconv_open().) */
+   is small. They all do #include <iconv.h>. */
 
 /* Define iconv_t ourselves. */
 #undef iconv_t
@@ -95,9 +90,7 @@ extern "C" {
 
 /* Allocates descriptor for code conversion from encoding ‘fromcode’ to
    encoding ‘tocode’. */
-#ifndef LIBICONV_PLUG
 #define iconv_open libiconv_open
-#endif
 extern LIBICONV_SHLIB_EXPORTED iconv_t iconv_open (const char* tocode, const char* fromcode);
 
 /* Converts, using conversion descriptor ‘cd’, at most ‘*inbytesleft’ bytes
@@ -105,15 +98,11 @@ extern LIBICONV_SHLIB_EXPORTED iconv_t iconv_open (const char* tocode, const cha
    ‘*outbuf’.
    Decrements ‘*inbytesleft’ and increments ‘*inbuf’ by the same amount.
    Decrements ‘*outbytesleft’ and increments ‘*outbuf’ by the same amount. */
-#ifndef LIBICONV_PLUG
 #define iconv libiconv
-#endif
 extern LIBICONV_SHLIB_EXPORTED size_t iconv (iconv_t cd,  char* * inbuf, size_t *inbytesleft, char* * outbuf, size_t *outbytesleft);
 
 /* Frees resources allocated for conversion descriptor ‘cd’. */
-#ifndef LIBICONV_PLUG
 #define iconv_close libiconv_close
-#endif
 extern LIBICONV_SHLIB_EXPORTED int iconv_close (iconv_t cd);
 
 
@@ -121,8 +110,6 @@ extern LIBICONV_SHLIB_EXPORTED int iconv_close (iconv_t cd);
 }
 #endif
 
-
-#ifndef LIBICONV_PLUG
 
 /* Nonstandard extensions. */
 
@@ -232,17 +219,21 @@ struct iconv_fallbacks {
 #define ICONV_SURFACE_EBCDIC_ZOS_UNIX  1
 
 /* Requests for iconvctl. */
-#define ICONV_TRIVIALP            0  /* int *argument */
-#define ICONV_GET_TRANSLITERATE   1  /* int *argument */
-#define ICONV_SET_TRANSLITERATE   2  /* const int *argument */
-#define ICONV_GET_DISCARD_ILSEQ   3  /* int *argument */
-#define ICONV_SET_DISCARD_ILSEQ   4  /* const int *argument */
-#define ICONV_SET_HOOKS           5  /* const struct iconv_hooks *argument */
-#define ICONV_SET_FALLBACKS       6  /* const struct iconv_fallbacks *argument */
-#define ICONV_GET_FROM_SURFACE    7  /* unsigned int *argument */
-#define ICONV_SET_FROM_SURFACE    8  /* const unsigned int *argument */
-#define ICONV_GET_TO_SURFACE      9  /* unsigned int *argument */
-#define ICONV_SET_TO_SURFACE     10  /* const unsigned int *argument */
+#define ICONV_TRIVIALP                    0  /* int *argument */
+#define ICONV_GET_TRANSLITERATE           1  /* int *argument */
+#define ICONV_SET_TRANSLITERATE           2  /* const int *argument */
+#define ICONV_GET_DISCARD_ILSEQ           3  /* int *argument */
+#define ICONV_SET_DISCARD_ILSEQ           4  /* const int *argument */
+#define ICONV_SET_HOOKS                   5  /* const struct iconv_hooks *argument */
+#define ICONV_SET_FALLBACKS               6  /* const struct iconv_fallbacks *argument */
+#define ICONV_GET_FROM_SURFACE            7  /* unsigned int *argument */
+#define ICONV_SET_FROM_SURFACE            8  /* const unsigned int *argument */
+#define ICONV_GET_TO_SURFACE              9  /* unsigned int *argument */
+#define ICONV_SET_TO_SURFACE             10  /* const unsigned int *argument */
+#define ICONV_GET_DISCARD_INVALID        11  /* int *argument */
+#define ICONV_SET_DISCARD_INVALID        12  /* const int *argument */
+#define ICONV_GET_DISCARD_NON_IDENTICAL  13  /* int *argument */
+#define ICONV_SET_DISCARD_NON_IDENTICAL  14  /* const int *argument */
 
 /* Listing of locale independent encodings. */
 #define iconvlist libiconvlist
@@ -267,8 +258,6 @@ extern LIBICONV_SHLIB_EXPORTED void libiconv_set_relocation_prefix (const char *
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif
 
 
