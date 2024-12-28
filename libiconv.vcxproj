@@ -53,6 +53,7 @@
   <ItemGroup>
     <None Include="LICENSE" />
     <None Include="README.md" />
+    <None Include="ReleaseNote" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libiconv\libcharset\lib\localcharset.c" />
