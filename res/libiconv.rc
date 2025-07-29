@@ -3,9 +3,9 @@
 #include <winver.h>
 
 #define PACKAGE_VERSION_MAJOR 1
-#define PACKAGE_VERSION_MINOR 17
-#define PACKAGE_VERSION_SUBMINOR 46
-#define PACKAGE_VERSION_STRING "1.17-eed6782"
+#define PACKAGE_VERSION_MINOR 18
+#define PACKAGE_VERSION_SUBMINOR 47
+#define PACKAGE_VERSION_STRING "1.18-ab0d09d"
 
 VS_VERSION_INFO VERSIONINFO
  FILEVERSION PACKAGE_VERSION_MAJOR,PACKAGE_VERSION_MINOR,PACKAGE_VERSION_SUBMINOR,0
@@ -29,7 +29,7 @@ BEGIN
             VALUE "FileDescription", "LGPLed libiconv for Windows\0"
             VALUE "FileVersion", PACKAGE_VERSION_STRING "\0"
             VALUE "InternalName", "iconv.dll\0"
-            VALUE "LegalCopyright", "Copyright (C) 1999-2022\0"
+            VALUE "LegalCopyright", "Copyright (C) 1999-2024\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "iconv.dll\0"
             VALUE "ProductName", "libiconv: character set conversion library\0"
