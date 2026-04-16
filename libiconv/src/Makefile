@@ -17,7 +17,7 @@ datadir = ${datarootdir}
 localedir = ${datarootdir}/locale
 
 # Programs used by "make":
-CC = /e/Projects/libiconv_conf/build-aux/compile cl -nologo
+CC = /d/GitLocal/libiconv-for-Windows/libiconv/build-aux/compile cl -nologo
 CFLAGS = -MD
 CPPFLAGS = -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -I/usr/local/msvc64/include
 LDFLAGS = -L/usr/local/msvc64/lib
@@ -40,13 +40,13 @@ mkinstalldirs = $(SHELL) ../build-aux/mkinstalldirs
 # Programs used by "make install-strip":
 STRIP = :
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-install_sh = ${SHELL} /e/Projects/libiconv_conf/build-aux/install-sh
+install_sh = ${SHELL} /d/GitLocal/libiconv-for-Windows/libiconv/build-aux/install-sh
 
 #### End of system configuration section. ####
 
 SHELL = /bin/sh
 
-PACKAGE_VERSION = 1.18
+PACKAGE_VERSION = 1.19
 
 # Needed by $(LIBTOOL).
 top_builddir = ..
@@ -56,6 +56,8 @@ EXEEXT = .exe
 
 # Needed by RELOCATABLE_LDFLAGS.
 host = x86_64-w64-mingw32
+bindir_c_make = \"$(bindir)\"
+localedir_c_make = \"$(localedir)\"
 
 OBJECTS_RES_yes = iconv.res
 OBJECTS_RES_no =
@@ -78,10 +80,10 @@ iconv_no_i18n$(EXEEXT) : iconv_no_i18n.obj ../lib/libiconv.la $(OBJECTS_RES_yes)
 	$(LIBTOOL_LINK) $(CC) $(LDFLAGS) $(CFLAGS) iconv_no_i18n.obj ../srclib/libicrt.a ../lib/libiconv.la $(OBJECTS_RES_yes) -o $@
 
 iconv_no_i18n.obj : $(srcdir)/iconv_no_i18n.c $(srcdir)/iconv.c
-	$(CC) -c $(INCLUDES) -I../lib $(CFLAGS) $(CPPFLAGS) -DINSTALLDIR=\"$(bindir)\" -DLOCALEDIR=\"$(localedir)\" $(srcdir)/iconv_no_i18n.c
+	$(CC) -c $(INCLUDES) -I../lib $(CFLAGS) $(CPPFLAGS) -DINSTALLDIR=$(bindir_c_make) -DLOCALEDIR=$(localedir_c_make) $(srcdir)/iconv_no_i18n.c
 
 iconv.obj : $(srcdir)/iconv.c
-	$(CC) -c $(INCLUDES) -I../lib $(CFLAGS) $(CPPFLAGS) -DINSTALLDIR=\"$(bindir)\" -DLOCALEDIR=\"$(localedir)\" $(srcdir)/iconv.c
+	$(CC) -c $(INCLUDES) -I../lib $(CFLAGS) $(CPPFLAGS) -DINSTALLDIR=$(bindir_c_make) -DLOCALEDIR=$(localedir_c_make) $(srcdir)/iconv.c
 
 iconv.res : $(srcdir)/../windows/iconv.rc
 	$(WINDRES) `$(SHELL) $(srcdir)/../windows/windres-options --escape $(PACKAGE_VERSION)` -i $(srcdir)/../windows/iconv.rc -o iconv.res --output-format=coff

@@ -147,7 +147,7 @@ want_nocaseglob="yes"
 sharedlib_from_linklib_cmd="func_cygming_dll_for_implib"
 
 # The archiver.
-AR="/e/Projects/libiconv_conf/build-aux/ar-lib lib"
+AR="/d/GitLocal/libiconv-for-Windows/libiconv/build-aux/ar-lib lib"
 
 # Flags to create an archive (by configure).
 lt_ar_flags=cr
@@ -170,7 +170,7 @@ old_postuninstall_cmds=""
 lock_old_archive_extraction=no
 
 # A C compiler.
-LTCC="/e/Projects/libiconv_conf/build-aux/compile cl -nologo"
+LTCC="/d/GitLocal/libiconv-for-Windows/libiconv/build-aux/compile cl -nologo"
 
 # LTCC compiler flags.
 LTCFLAGS="-MD"
@@ -296,7 +296,7 @@ finish_eval=""
 hardcode_into_libs=no
 
 # Compile-time system search path for libraries.
-sys_lib_search_path_spec="/C/PROGRA~1/MICROS~1/2022/COMMUN~1/VC/Tools/MSVC/1442~1.344/atlmfc/lib/x64 /C/PROGRA~1/MICROS~1/2022/COMMUN~1/VC/Tools/MSVC/1442~1.344/lib/x64 /C/PROGRA~2/WI3CF2~1/NETFXSDK/4.8/Lib/um/x64 /C/PROGRA~2/WI3CF2~1/10/Lib/100261~1.0/ucrt/x64 /C/PROGRA~2/WI3CF2~1/10/Lib/100261~1.0/um/x64"
+sys_lib_search_path_spec="/C/PROGRA~2/MICROS~2/18/BUILDT~1/VC/Tools/MSVC/1450~1.357/lib/x64 /C/PROGRA~2/WI3CF2~1/10/Lib/100261~1.0/ucrt/x64 /C/PROGRA~2/WI3CF2~1/10/Lib/100261~1.0/um/x64"
 
 # Detected run-time system search path for libraries.
 sys_lib_dlsearch_path_spec="/lib /usr/lib"
@@ -329,7 +329,7 @@ reload_cmds="false"
 old_archive_cmds="\$AR \$AR_FLAGS \$oldlib\$oldobjs~\$RANLIB \$tool_oldlib"
 
 # A language specific compiler.
-CC="/e/Projects/libiconv_conf/build-aux/compile cl -nologo"
+CC="/d/GitLocal/libiconv-for-Windows/libiconv/build-aux/compile cl -nologo"
 
 # Is the compiler the GNU compiler?
 with_gcc=

@@ -7,6 +7,9 @@
 /* Define to 1 if you have the 'copy_file_range' function. */
 /* #undef HAVE_COPY_FILE_RANGE */
 
+/* Define to 1 if dladdr exists and is defined in libc. */
+/* #undef HAVE_DLADDR_IN_LIBC */
+
 /* Define to 1 if you have the <dlfcn.h> header file. */
 /* #undef HAVE_DLFCN_H */
 
@@ -59,10 +62,13 @@
 /* Define to 1 if you have the <wchar.h> header file. */
 #define HAVE_WCHAR_H 1
 
-/* Define to 1 if O_NOATIME works. */
+/* Define to 1 if O_DIRECTORY works, 0 otherwise. */
+#define HAVE_WORKING_O_DIRECTORY 0
+
+/* Define to 1 if O_NOATIME works, 0 otherwise. */
 #define HAVE_WORKING_O_NOATIME 0
 
-/* Define to 1 if O_NOFOLLOW works. */
+/* Define to 1 if O_NOFOLLOW works, 0 otherwise. */
 #define HAVE_WORKING_O_NOFOLLOW 0
 
 /* Define to 1 if you have the '_NSGetExecutablePath' function. */

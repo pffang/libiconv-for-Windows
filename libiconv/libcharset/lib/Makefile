@@ -12,7 +12,7 @@ exec_prefix = ${prefix}
 libdir = ${exec_prefix}/lib
 
 # Programs used by "make":
-CC = /e/Projects/libiconv_conf/build-aux/compile cl -nologo
+CC = /d/GitLocal/libiconv-for-Windows/libiconv/build-aux/compile cl -nologo
 CFLAGS = -MD 
 CPPFLAGS = -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -I/usr/local/msvc64/include
 LDFLAGS = -L/usr/local/msvc64/lib

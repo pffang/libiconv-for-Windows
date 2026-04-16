@@ -4,18 +4,18 @@
 
 The `libiconv` library for Windows (via the Microsoft Visual C/C++ Compiler (MSVC)) based on [GNU libiconv][1].
 
-Solution file updated to Visual Studio 2022 **only**.
+Solution file updated to Visual Studio 2026 **only**.
 
 ## Version
 
-`libiconv` library version `1.18-eed6782`
+`libiconv` library version `1.19`
 
 # How To Build
 
-1. Download and install [Visual Studio 2022 Community Edition][4].
-   - If applicable, use another accompanying edition for Visual Studio 2022 (e.g. Professional, Enterprise, etc.).
+1. Download and install [Visual Studio 2026 Community Edition][4].
+   - If applicable, use another accompanying edition for Visual Studio 2026 (e.g. Professional, Enterprise, etc.).
    - **(Required)** Ensure to select the "*Desktop development with C++*" component from the "*Visual Studio Installer*" to get all the x86 and x64 build tools.
-2. **(Optional)** For compiling ARM64 builds, ensure to also install the "*MSVC v### - VS 2022 C++ ARM64 build tools (latest)*" individual component from the *Visual Studio Installer* (where '###' is the current version of MSVC).
+2. **(Optional)** For compiling ARM64 builds, ensure to also install the "*MSVC v### - VS 2026 C++ ARM64 build tools (latest)*" individual component from the *Visual Studio Installer* (where '###' is the current version of MSVC).
    - The "*Visual Studio Installer*" can be launched by typing this name into the Windows search on Windows 11.
 3. Clone this repository and open up the `Liblconv.sln` project file in Visual Studio.
 4. Select the architecture (e.g. `ARM64`, `x64`, `x86`) and configuration (e.g. `Release`, `ReleaseStatic`, `Debug`, `DebugStatic`) to build for.
